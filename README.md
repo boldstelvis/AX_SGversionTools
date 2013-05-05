@@ -103,23 +103,23 @@ note that for any returned fields that link to other entities values will contai
 ___
 
 
-###get_all_versions( *entity* , *data* )	
+###get_all_versions( *entity* , *data* )
 
-> finds all versions associated with the supplied entity
-		
-> `dict` *entity*
-> should be a single SG entity query result - ie as returned from get_entity()
+finds all versions associated with the supplied entity
 
-> `dict` *data*
-> is optional and if supplied needs to describe a version type and contain just one key:
+`dict` *entity*  
+should be a single SG entity query result - ie as returned from get_entity()
 
-* `string` *type*
-> an identifier for the task context (eg 'Lighting', 'Model') - this should match one of the list options for 'type' from the associated SG field
-			
->**Returns:**
+`dict` *data*  
+is optional and if supplied needs to describe a version type and contain just one key:
 
-> `list` *Versions*
-> a list of `dicts` describing sg version entities associated with the supplied shot/asset entity (further limited to version type if supplied) - empty list if none found
+- `string` *type*  
+an identifier for the task context (eg 'Lighting', 'Model') - this should match one of the list options for 'type' from the associated SG field
+
+**Returns:**
+
+`list` *Versions*  
+a list of `dicts` describing sg version entities associated with the supplied shot/asset entity (further limited to version type if supplied) - empty list if none found
 			
 ___
 
@@ -164,7 +164,7 @@ an identifier for the task context (eg 'Lighting', 'Model') - this should match 
 
 - `int` *inc*  
 the version increment to be returned (eg: 1, 5, etc)
- 
+
 **Returns:**
 
 `dict` *Version*  
@@ -180,8 +180,9 @@ creates a new version, incrementing the previous version number for the specific
 `dict` *entity*  
 an SG entity object for a valid shot or asset as returned by get_entity()
 
-- `dict` *data*  
+`dict` *data*  
 needs to describe various properties of the new version as follows:
+
 
 **Returns:**
 
@@ -270,7 +271,7 @@ a path to a secondary more highly compressed mp4 version media (used by shotguns
 - `string` *webm*  
 a path to a secondary more highly compressed webm version media (used by shotguns web player for browsers that don't support mp4)
 
-**Returns: **
+**Returns:**
 
 `dict` *Version*  
 an updated SG version object with updated field values 
