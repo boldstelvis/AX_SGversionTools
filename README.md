@@ -26,73 +26,73 @@ I suspect with some clever thinking more of the entire versioning pipeline can b
 
 >creates initial connection to the SG server, MUST be run before calling any other method
 
->**returns:**
+**returns:**
 
->`dict` *Shotgun Object*
+`dict` *Shotgun Object*
 
 
 			
 **get_project(** `int` *project_id* **)**
 
->Very simple wrapper around sg.find_one() to return project metadata
+Very simple wrapper around sg.find_one() to return project metadata
 		
->`int` *project_id*
-> must be a valid SG project id or an exception will be raised
+`int` *project_id*
+must be a valid SG project id or an exception will be raised
 
 >**Returns:**
 			
->`dict` *Project*
-> an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
+`dict` *Project*
+an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
 		
 		
 **get_user(** `dict` *data* **)**
 
-> 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
+'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 		
-> `dict` *data*
-> must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
+`dict` *data*
+must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
-*  `string` *field*
+* `string` *field*
 > the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 
-*  `string` *value*
+* `string` *value*
 > the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
->**Returns:**   
+**Returns:**   
 
->`dict` *HumanUser*
-> an SG HumanUser entity containing field data (crucially id)
+`dict` *HumanUser*
+an SG HumanUser entity containing field data (crucially id)
 
 			
 **get_entity(** `dict` *data* **)**
 
-> a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
+a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
 
-> `dict` *data*
-> must consist of 4 keys that can together, uniquely describe a valid Shot or Asset entity within the SG schema: 
->
+`dict` *data*
+must consist of 4 keys that can together, uniquely describe a valid Shot or Asset entity within the SG schema: 
+
 * `string` *entity_type*
-> must be either 'Shot' or 'Asset'
+>> must be either 'Shot' or 'Asset'
 
 * `string` *entity_code*
-> the name of the shot or asset (eg 'sh010', 'MyAsset')
+>> the name of the shot or asset (eg 'sh010', 'MyAsset')
  		
 * `string` *parent_code*
-> the name of the shot or asset's parent container (eg 'sc01', 'character')
+>> the name of the shot or asset's parent container (eg 'sc01', 'character')
 
 >> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
 
 >>this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
 
 * `string` *project_code*
-> the project code identifier (eg 'A0875', 'S0001')
+>> the project code identifier (eg 'A0875', 'S0001')
 
->**Returns:**
+**Returns:**
 
->`dict` *Shot* - or - `dict` *Asset*
-> an Sg entity consisting of various fields on the requested entity
+`dict` *Shot* - or - `dict` *Asset*
+an Sg entity consisting of various fields on the requested entity
 
-> note that for any returned fields that link to other entities values will contain nested dicts themselves describing those linked entities 
+note that for any returned fields that link to other entities values will contain nested dicts themselves describing those linked entities 
 	
 
 **get_all_versions(** `dict` *entity* , `dict` *data* **)**	
