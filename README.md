@@ -38,11 +38,13 @@ ___
 >Very simple wrapper around sg.find_one() to return project metadata
 		
 >`int` *project_id*   
+
 > must be a valid SG project id or an exception will be raised
 
 >**Returns:**
 			
 >`dict` *Project*   
+
 > an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
 
 ___
@@ -52,18 +54,22 @@ ___
 
 > 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 		
-> `dict` *data*   
+> `dict` *data*  
+ 
 > must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 > 
-*  `string` *field*    
+*  `string` *field*  
+>  
 > the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 >
-*  `string` *value*    
+*  `string` *value*  
+>  
 > the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 >**Returns:**   
 
 >`dict` *HumanUser*   
+
 > an SG HumanUser entity containing field data (crucially id)
 
 ___
@@ -74,15 +80,19 @@ ___
 > a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
 
 > `dict` *data* 
+
 > must consist of 4 keys that can together, uniquely describe a valid Shot or Asset entity within the SG schema: 
 >
 * `string` *entity_type*   
+
 > must be either 'Shot' or 'Asset'
 >
-* `string` *entity_code*   
+* `string` *entity_code*  
+ 
 > the name of the shot or asset (eg 'sh010', 'MyAsset')
 > 		
-* `string` *parent_code*   
+* `string` *parent_code*  
+ 
 > the name of the shot or asset's parent container (eg 'sc01', 'character')
 
 >> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
