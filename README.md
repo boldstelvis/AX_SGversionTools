@@ -37,12 +37,12 @@ ___
 
 Very simple wrapper around sg.find_one() to return project metadata
 		
-`int` *project_id*. 
+`int` *project_id*  
 must be a valid SG project id or an exception will be raised
 
 **Returns:**
 			
-`dict` *Project*. 
+`dict` *Project*  
 an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
 		
 
@@ -56,11 +56,11 @@ ___
 `dict` *data*  
 must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
-> * `string` *field*  
-> the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
+- `string` *field*  
+the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 
-> * `string` *value*  
-> the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
+- `string` *value*  
+the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 **Returns:**   
 
@@ -73,24 +73,24 @@ ___
 
 a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
 
-`dict` *data*
+`dict` *data*  
 must consist of 4 keys that can together, uniquely describe a valid Shot or Asset entity within the SG schema: 
 
-* `string` *entity_type*
->> must be either 'Shot' or 'Asset'
+- `string` *entity_type*  
+must be either 'Shot' or 'Asset'
 
-* `string` *entity_code*
->> the name of the shot or asset (eg 'sh010', 'MyAsset')
+- `string` *entity_code*  
+the name of the shot or asset (eg 'sh010', 'MyAsset')
  		
-* `string` *parent_code*
->> the name of the shot or asset's parent container (eg 'sc01', 'character')
+- `string` *parent_code*  
+the name of the shot or asset's parent container (eg 'sc01', 'character')
 
->> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
+> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
 
->>this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
+> this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
 
-* `string` *project_code*
->> the project code identifier (eg 'A0875', 'S0001')
+- `string` *project_code*  
+the project code identifier (eg 'A0875', 'S0001')
 
 **Returns:**
 
