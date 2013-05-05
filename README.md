@@ -52,7 +52,7 @@ ___
 **get_user(** `dict` *data* **)**
 
 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
-		
+
 `dict` *data*  
 must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
@@ -81,20 +81,22 @@ must be either 'Shot' or 'Asset'
 
 - `string` *entity_code*  
 the name of the shot or asset (eg 'sh010', 'MyAsset')
+
+- `string` *project_code*  
+the project code identifier (eg 'A0875', 'S0001')
  		
 - `string` *parent_code*  
 the name of the shot or asset's parent container (eg 'sc01', 'character')
 
-> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
+note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
 
-> this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
+this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
 
-- `string` *project_code*  
-the project code identifier (eg 'A0875', 'S0001')
+
 
 **Returns:**
 
-`dict` *Shot* - or - `dict` *Asset*
+`dict` *Shot* - or - `dict` *Asset*  
 an Sg entity consisting of various fields on the requested entity
 
 note that for any returned fields that link to other entities values will contain nested dicts themselves describing those linked entities 
