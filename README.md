@@ -3,7 +3,7 @@ AX_SGversionTools
 
 **Prototype wrapper for dealing with studio shotgun commits**
 
-##Reference: implemented methods:
+###Reference: implemented methods:
 
 The module consists of three main types of function:
 
@@ -24,12 +24,13 @@ I suspect with some clever thinking more of the entire versioning pipeline can b
 	
 **connect()**
 
->creates initial connection to the SG server, MUST be run before calling any other method
+creates initial connection to the SG server, MUST be run before calling any other method
 
 **returns:**
 
 `dict` *Shotgun Object*
 
+___
 
 			
 **get_project(** `int` *project_id* **)**
@@ -44,6 +45,9 @@ must be a valid SG project id or an exception will be raised
 `dict` *Project*
 an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
 		
+
+___
+
 		
 **get_user(** `dict` *data* **)**
 
@@ -53,16 +57,17 @@ an SG project entity containing various field data including the project short c
 must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
 * `string` *field*
-> the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
+the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 
 * `string` *value*
-> the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
+the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 **Returns:**   
 
 `dict` *HumanUser*
 an SG HumanUser entity containing field data (crucially id)
 
+___
 			
 **get_entity(** `dict` *data* **)**
 
