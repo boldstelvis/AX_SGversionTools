@@ -20,7 +20,7 @@ In particular I've tried to design the shotgun specific functionality and proces
 
 I suspect with some clever thinking more of the entire versioning pipeline can be unified and shared than might at first be obvious (eg even things like certain UIs could be shared as long as the applications support python. Underlying specific functions - eg play blasting vs rendering on the farm can be abstracted away from core publishing features)
 
-___
+
 	
 **connect()**
 
@@ -30,107 +30,89 @@ ___
 
 >`dict` *Shotgun Object*
 
-___
 
 			
 **get_project(** `int` *project_id* **)**
 
 >Very simple wrapper around sg.find_one() to return project metadata
 		
->`int` *project_id*   
-
+>`int` *project_id*
 > must be a valid SG project id or an exception will be raised
 
 >**Returns:**
 			
->`dict` *Project*   
-
+>`dict` *Project*
 > an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
-
-___
-			
+		
 		
 **get_user(** `dict` *data* **)**
 
 > 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 		
-> `dict` *data*  
- 
+> `dict` *data*
 > must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
-> 
-*  `string` *field*  
->  
+
+*  `string` *field*
 > the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
->
-*  `string` *value*  
->  
+
+*  `string` *value*
 > the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 >**Returns:**   
 
->`dict` *HumanUser*   
-
+>`dict` *HumanUser*
 > an SG HumanUser entity containing field data (crucially id)
-
-___
 
 			
 **get_entity(** `dict` *data* **)**
 
 > a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
 
-> `dict` *data* 
-
+> `dict` *data*
 > must consist of 4 keys that can together, uniquely describe a valid Shot or Asset entity within the SG schema: 
 >
-* `string` *entity_type*   
-
+* `string` *entity_type*
 > must be either 'Shot' or 'Asset'
->
-* `string` *entity_code*  
- 
+
+* `string` *entity_code*
 > the name of the shot or asset (eg 'sh010', 'MyAsset')
-> 		
-* `string` *parent_code*  
- 
+ 		
+* `string` *parent_code*
 > the name of the shot or asset's parent container (eg 'sc01', 'character')
 
 >> note that **Shot** parent containers are currently defined in SG as links to a separate entity class (Scenes or Sequences) whereas **Asset** parent containers are more simply defined as a field value restricted to a limited set of strings. 
 
 >>this difference is however abstracted away inside any methods that have to make this distinction in terms of how they interact with Shotgun - the interface for either type is identical
-> 
-* `string` *project_code*    
+
+* `string` *project_code*
 > the project code identifier (eg 'A0875', 'S0001')
 
 >**Returns:**
 
->`dict` *Shot* - or - `dict` *Asset*    
+>`dict` *Shot* - or - `dict` *Asset*
 > an Sg entity consisting of various fields on the requested entity
-> 
-> note that for any returned fields that link to other entities values will contain nested dicts themselves describing those linked entities 
 
-___			
-		
+> note that for any returned fields that link to other entities values will contain nested dicts themselves describing those linked entities 
+	
 
 **get_all_versions(** `dict` *entity* , `dict` *data* **)**	
 
 > finds all versions associated with the supplied entity
 		
-> `dict` *entity*    
+> `dict` *entity*
 > should be a single SG entity query result - ie as returned from get_entity()
-> 
-> `dict` *data*     
+
+> `dict` *data*
 > is optional and if supplied needs to describe a version type and contain just one key:
-> 
-* `string` *type*     
+
+* `string` *type*
 > an identifier for the task context (eg 'Lighting', 'Model') - this should match one of the list options for 'type' from the associated SG field
 			
 >**Returns:**
 
-> `list` *Versions*     
+> `list` *Versions*
 > a list of `dicts` describing sg version entities associated with the supplied shot/asset entity (further limited to version type if supplied) - empty list if none found
-
-___			
+			
 
 
 **get_latest_version(** `dict` *entity* , `dict` *data* **)**	
@@ -139,21 +121,20 @@ ___
 		
 > arguments are the same as get_all_versions() with the exception that data is REQUIRED
 		
-> `dict` *entity*    
+> `dict` *entity*
 > should be a single SG entity query result - ie as returned from get_entity()
-> 
-> `dict` *data*     
+
+> `dict` *data*
 > needs to describe a version type and contain just one key:
->
-* `string` *type*     
+
+* `string` *type*
 > an identifier for the task context (eg 'Lighting', 'Model') - this should match one of the list options for 'type' from the associated SG field
 			
 >**Returns:**
 
-> `dict` *Version*     
+> `dict` *Version*
 > the latest (as ordered by the 'inc' field) SG version entity of the specified type, associated with the supplied shot/asset entity - empty list if none found
 
-___
 			
 **get_specific_version(** `dict` *entity* , `dict` *data* **)**
 
@@ -161,125 +142,122 @@ ___
  
 > arguments are the same as get_all_versions() with the exception that data is REQUIRED and it must also contain an additional key identifying the version increment to be returned as well as one identifying type
  
-> `dict` *entity*    
+> `dict` *entity*
 > should be a single SG entity query result - ie as returned from get_entity()
  
-> `dict` *data*    
+> `dict` *data*
 >  needs to describe a version type **and** increment and contain two keys: 
-> 
- * `string` *type*     
+
+ * `string` *type*
 > an identifier for the task context (eg 'Lighting', 'Model') - this should match one of the list options for 'type' from the associated SG field
-> 
- * `int` *inc*     
+
+ * `int` *inc*
 > the version increment to be returned (eg: 1, 5, etc)
  
 >**Returns:** 
  
-> `dict` *Version*    
+> `dict` *Version*
 > the specified (ie by type and increment) SG version entity associated with the supplied shot/asset entity -  or an empty Dict if no matches were found (can thus be used to check if a specific version exists)
 	
-___
 			
 		
 **create_version(** `dict` *entity* , `dict` *data* **)** 
 
 > creates a new version, incrementing the previous version number for the specific version type by 1 (If there is one) - it calls get_latest_version() first in order to do this
 
-> `dict` *entity*     
+> `dict` *entity*
 > an SG entity object for a valid shot or asset as returned by get_entity()
 
-> `dict` *data*    
+> `dict` *data*
 >  needs to describe various properties of the new version as follows:
 
 >**Returns:** 
 
-> `dict` *Version*    
+> `dict` *Version*
 > the newly created SG version entity -  raises an exception if this is not returned by shotgun
 
-___
 		
 			
 **get_version_path(** `dict` *entity* , `dict` *version* **)** 
 
 > used to generate appropriate file paths to version media - essentially maps the shotgun schema to the file system.
 	
-> `dict` *entity*     
+> `dict` *entity*
 > an SG entity object for a valid shot or asset as returned by get_entity()
 
-> `dict` *version*    
+> `dict` *version*
 > an SG version object for a valid existing version as returned by create_version() or any of the get_version methods that return a single version
 			
 >**returns:**
 
-> `dict` *path*    
+> `dict` *path*
 > contains 4 keys describing valid system filepaths to the input and output media used by shotgun:
->
-* `string` *input*     
+
+* `string` *input*
 > a path to where the version frames on disk ought to be located
-> 
-* `string` *mov*    
+
+* `string` *mov*
 > a path to the primary quicktime compiled version media
-> 
-* `string` *mp4*	
+
+* `string` *mp4*
 > A path to a secondary more highly compressed mp4 version media (used by shotguns web player)
-> 
-* `string` *webm*	 
+
+* `string` *webm*
 > A path to a secondary more highly compressed webm version media (used by shotguns web player for browsers that don't support mp4)
 
-___
+
 		
 **create_version_media(** `dict` *paths* **)** 
 
 > a wrapper around ffmpeg used to create version media from an existing input source (ie a playblast avi or comped frames)
 		
-> `dict` *paths*        
+> `dict` *paths*
 >  as returned by get_version_path() - the two methods are explicitly designed to be chained together. needs to contain 4 keys:
->
-* `string` *input*         
+
+* `string` *input*
 > a path to where the version frames on disk ought to be located
-> 		
-* `string` *mov*    
+		
+* `string` *mov*
 > a path to the primary quicktime compiled version media
->
-* `string` *mp4*	
+
+* `string` *mp4*
 > A path to a secondary more highly compressed mp4 version media (used by shotguns web player)
-> 
-* `string` *webm*	 
+ 
+* `string` *webm*
 > A path to a secondary more highly compressed webm version media (used by shotguns web player for browsers that don't support mp4)
 
 >**returns:**
 
-> `dict` *status*    
+> `dict` *status*
 > contains 3 keys denoting the success or otherwise of the media creation - one for each compiled output:
 
-___
 			
 			
 **update_version_media(** `dict` *version* , `dict` *paths* **)** 
 
 > adds version media paths to the version entity in SG - splitting this into a separate function allows for asynchronous processing of the various steps involved, though normally this would be called directly after create_version_media()
 		
-> `dict` *version*         
+> `dict` *version*
 > an SG version entity as returned by get_entity()
 
-> `dict` *paths*      
+> `dict` *paths*
 > a collection of filepaths as returned by get_version_media()
-> 
-* `string` *input*         
+ 
+* `string` *input*
 > a path to where the version frames on disk ought to be located
->
-* `string` *mov*    
+
+* `string` *mov*
 > a path to the primary quicktime compiled version media
-> 
-* `string` *mp4*	
+
+* `string` *mp4*
 > a path to a secondary more highly compressed mp4 version media (used by shotguns web player)
-> 
-* `string` *webm*	 
+
+* `string` *webm*
 > A path to a secondary more highly compressed webm version media (used by shotguns web player for browsers that don't support mp4)
 			
 > **Returns: **
 
-> `dict` *Version*       
+> `dict` *Version*
 > an updated SG version object with updated field values 
 	
 			
