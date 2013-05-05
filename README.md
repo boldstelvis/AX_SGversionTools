@@ -53,18 +53,18 @@ ___
 
 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 		
-`dict` *data*. 
+`dict` *data*  
 must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
-* `string` *field*. 
-the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
+> * `string` *field*  
+> the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 
-* `string` *value*. 
-the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
+> * `string` *value*  
+> the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 **Returns:**   
 
-`dict` *HumanUser*. 
+`dict` *HumanUser*  
 an SG HumanUser entity containing field data (crucially id)
 
 ___
