@@ -1,12 +1,12 @@
 """
-a collection of basic tools for dealing with version management on shotgun	
-		
+a collection of basic tools for dealing with version management on shotgun
+
 """
 
 __author__ = 'Stu Aitken <stuartaitken@axisanimation.com>'
 __maintainer__ = 'Stu Aitken <stuartaitken@axisanimation.com>'
 __status__  = 'Prototype'
-__version__ = '0.85'
+__version__ = '0.86'
 __date__    = '05-05-2013'
 __copyright__ = 'Copyright 2013, Axis Animation'
 __contributors__ = ('Roman Ignatov <romanignatov@axisanimation.com>')
@@ -31,16 +31,11 @@ except:
 	# normal imports
 	from shotgun import Shotgun
 
-# import server settings
-import AX_sg_setup
-	
 
 def connect():
 
-	SERVER_PATH = 'https://%s.shotgunstudio.com' %AX_sg_setup.STUDIO
-	SCRIPT_USER = 'AX_SGversionTools' 
-	SCRIPT_KEY = AX_sg_setup.KEY
-	sg = Shotgun(SERVER_PATH, SCRIPT_USER, SCRIPT_KEY)
+	import AX_sg_setup as sgcon
+	sg = Shotgun(sgcon.SERVER_PATH, sgcon.SCRIPT_USER, sgcon.SCRIPT_KEY)
 	return sg
 		
 def get_user(data):
@@ -220,8 +215,8 @@ def get_version_path(entity, version):
 	media_path = base_path + 'preview/' + version['code']
 	frame_path = base_path + 'frames/' + version['code']
 	paths = {
-		'in': os.path.normpath(frame_path + '_%04d.exr'),
-		'out': os.path.normpath(media_path + '.mov'),
+		'input': os.path.normpath(frame_path + '_%04d.exr'),
+		'mov': os.path.normpath(media_path + '.mov'),
 		'mp4': os.path.normpath(media_path + '_SG.mp4'),
 		'webm': os.path.normpath(media_path + '_SG.webm'),
 		}
@@ -239,19 +234,19 @@ def create_version_media(paths, data):
 		#create prores master
 		vcodec = ' -pix_fmt yuv422p10le -vcodec prores -profile:v 3 -vendor ap10 -filter:v scale="1280:trunc(ow/a/2)*2"'
 		acodec = ' -acodec pcm_s16le -ar 48k'
-		commandline = ffmpeg + rate + '-i ' + paths['in'] + vcodec + acodec + rate + paths['out']
+		commandline = ffmpeg + rate + '-i ' + paths['input'] + vcodec + acodec + rate + paths['mov']
 		subprocess.call(commandline)
 		
 		#create mp4 for SG
 		vcodec = ' -pix_fmt yuv420p -vcodec libx264 -filter:v scale="1280:trunc(ow/a/2)*2" -b:v 4000k -vprofile high -bf 0 -strict experimental'
 		acodec = ' -acodec aac -ab 160k -ac 2'
-		commandline = ffmpeg + rate + '-i ' + paths['in'] + vcodec + acodec + rate + paths['mp4']
+		commandline = ffmpeg + rate + '-i ' + paths['input'] + vcodec + acodec + rate + paths['mp4']
 		subprocess.call(commandline)
 		
 		#create webm for SG
 		vcodec = ' -pix_fmt yuv420p -vcodec libvpx -filter:v scale="1280:trunc(ow/a/2)*2" -b:v 4000k -quality realtime -cpu-used 0 -qmin 10 -qmax 42'
 		acodec = ' -acodec libvorbis -aq 60 -ac 2'
-		commandline = ffmpeg + rate + '-i ' + paths['in'] + vcodec + acodec + rate + paths['webm']
+		commandline = ffmpeg + rate + '-i ' + paths['input'] + vcodec + acodec + rate + paths['webm']
 		subprocess.call(commandline)
 		
 	return get_media_status(paths)
@@ -261,7 +256,7 @@ def get_frame_status(paths, data):
 	i = data['in']
 	status = True
 	while i <= data['out']:
-		if not os.path.exists(paths['in'][:-8] + str(i).zfill(4) + '.exr'):
+		if not os.path.exists(paths['input'][:-8] + str(i).zfill(4) + '.exr'):
 			status = False
 		i = i + 1
 			
@@ -271,7 +266,7 @@ def get_media_status(paths):
 			
 	status = {}
 	for key, value in paths.iteritems():
-		if key != 'in':
+		if key != 'input':
 			if os.path.exists(value):
 				status.update({key: True})
 			else:
@@ -285,7 +280,7 @@ def update_version_media(paths, version):
 	url_root = 'http://yogi.axis.rocks'
 	
 	local_link = {
-		'local_path': paths['out'],
+		'local_path': paths['mov'],
 		'name': version['code'] + '.mov',
 		'content_type': 'video/quicktime',
 		'link_type': 'local',
@@ -306,8 +301,8 @@ def update_version_media(paths, version):
 		}
 	
 	data = {
-		'sg_path_to_frames': paths['in'].replace('%04d',str(version['sg_first_frame']).zfill(4)),
-		'sg_path_to_movie': paths['out'],
+		'sg_path_to_frames': paths['input'].replace('%04d',str(version['sg_first_frame']).zfill(4)),
+		'sg_path_to_movie': paths['mov'],
 		'sg_uploaded_movie_mp4': mp4_link,
 		'sg_uploaded_movie_webm': webm_link,
 		'sg_uploaded_movie_transcoding_status': 1,
