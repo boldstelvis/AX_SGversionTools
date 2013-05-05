@@ -20,7 +20,7 @@ In particular I've tried to design the shotgun specific functionality and proces
 
 I suspect with some clever thinking more of the entire versioning pipeline can be unified and shared than might at first be obvious (eg even things like certain UIs could be shared as long as the applications support python. Underlying specific functions - eg play blasting vs rendering on the farm can be abstracted away from core publishing features)
 
-
+___
 	
 **connect()**
 
@@ -37,12 +37,12 @@ ___
 
 Very simple wrapper around sg.find_one() to return project metadata
 		
-`int` *project_id*
+`int` *project_id*. 
 must be a valid SG project id or an exception will be raised
 
->**Returns:**
+**Returns:**
 			
-`dict` *Project*
+`dict` *Project*. 
 an SG project entity containing various field data including the project short code (eg 'STU', 'OSR')
 		
 
@@ -53,18 +53,18 @@ ___
 
 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 		
-`dict` *data*
+`dict` *data*. 
 must consist of two key/value pairs that uniquely describe a valid HumanUser entity in SG:
 
-* `string` *field*
+* `string` *field*. 
 the name of the uniquely valued field used to generate the query (in practice it must be one of: 'id', 'name', 'login' or 'email')
 
-* `string` *value*
+* `string` *value*. 
 the field value data used to generate the query (eg 28, 'mike', 'Mike Smith', 'mike@somewhere.com')
 			
 **Returns:**   
 
-`dict` *HumanUser*
+`dict` *HumanUser*. 
 an SG HumanUser entity containing field data (crucially id)
 
 ___
