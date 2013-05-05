@@ -22,7 +22,7 @@ I suspect with some clever thinking more of the entire versioning pipeline can b
 
 ___
 	
-**connect()**
+###**connect()**
 
 creates initial connection to the SG server, MUST be run before calling any other method
 
@@ -33,7 +33,7 @@ creates initial connection to the SG server, MUST be run before calling any othe
 ___
 
 			
-**get_project(** `int` *project_id* **)**
+###**get_project(** `int` *project_id* **)**
 
 Very simple wrapper around sg.find_one() to return project metadata
 		
@@ -49,7 +49,7 @@ an SG project entity containing various field data including the project short c
 ___
 
 		
-**get_user(** `dict` *data* **)**
+###**get_user(** `dict` *data* **)**
 
 'helper' function used by other methods - simple wrapper around sg.find_one() that grabs user metadata
 
@@ -69,7 +69,7 @@ an SG HumanUser entity containing field data (crucially id)
 
 ___
 			
-**get_entity(** `dict` *data* **)**
+###**get_entity(** `dict` *data* **)**
 
 a simple wrapper for sg.find_one() to grab entity metadata for a defined shot or asset
 
