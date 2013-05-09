@@ -31,9 +31,7 @@ except:
 	# normal imports
 	from shotgun import Shotgun
 	
-SERVER_PATH = 'https://axis.shotgunstudio.com'
-SCRIPT_USER = 'AX_SGversionTools' 
-SCRIPT_KEY = 'f8b3d11c5b1af7177b55324869f6ecb8d3c768b0'
+import AX_sg_setup as sgcon
 
 class sg_version():
 	
@@ -48,7 +46,7 @@ class sg_version():
 		self._os_root = ''
 		self._echo_state = True
 		
-		self._sg = Shotgun(SERVER_PATH, SCRIPT_USER, SCRIPT_KEY)
+		self._sg = Shotgun(sgcon.SERVER_PATH, sgcon.SCRIPT_USER, sgcon.SCRIPT_KEY)
 		if context:
 			self.set_context(context)
 	
